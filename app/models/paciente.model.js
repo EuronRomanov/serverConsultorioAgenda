@@ -26,6 +26,10 @@ const Paciente=function(paciente) {
         this.ultimoAno=paciente.ultimoAno;
 };
 
+
+
+
+
 Paciente.create=(newPaciente, result)=>{
     sql.query("CALL proc_agregarNuevoPaciente(?,?,?,?,?,?,?,@respuesta); SELECT @respuesta as outParam",[newPaciente.nombre,
         newPaciente.cedula,
@@ -45,7 +49,15 @@ Paciente.create=(newPaciente, result)=>{
 };
 
 Paciente.getAll=(cedula, result)=>{
-    let query="Select * from paciente";
+    /*SELECT 
+    
+   
+    
+    
+   
+    
+FROM paciente*/
+    let query="Select idPaciente,nombre,fechaNacimiento, cedula,celular,lugarResidencia,direccion from paciente";
 
     if (cedula) {
         query+=` WHERE cedula LIKE '%${cedula}%'`;
@@ -77,6 +89,19 @@ Paciente.getAllCombo=( result)=>{
     });
 };
 
+//eliminar
+Paciente.remove =(id, result)=>{
+    
+    sql.query("CALL proc_eliminarPaciente(?,@respuesta); SELECT @respuesta as outParam",[id],(err,res)=>{
+        if (err) {
+           console.log("error : ",err);
+           result(err, null);
+           return;
+        }
+        console.log("removed patient");
+        result(null,res[1][0].outParam);
+    });
+};
 
 //buscar por id
 Paciente.findById=(id,result)=>{

@@ -8,6 +8,6 @@ module.exports=app=>{
     router.get("/comboPacientes",pacientes.findAllCombo);
 
     router.get("/:id", pacientes.findOne);
-
+    router.delete("/:id", pacientes.delete);
     app.use('/api/pacientes',router);
 };

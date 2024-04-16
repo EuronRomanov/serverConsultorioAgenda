@@ -10,7 +10,7 @@ exports.create=(req,res)=>{
 
    
     const paciente=new Paciente({
-        nombre:req.body.nombre,
+        nombre:req.body.nombre.toUpperCase(),
         cedula:req.body.cedula,
         celular:req.body.celular,
         direccion:req.body.direccion,
@@ -78,6 +78,22 @@ exports.findAllCombo=(req,res)=>{
     });
 };
 
+
+exports.delete = (req, res) => {
+    Paciente.remove(req.params.id, (err, data) => {
+        if (err) {
+          if (err.kind === "not_found") {
+            res.status(404).send({
+              message: `Not found Patient with id ${req.params.id}.`
+            });
+          } else {
+            res.status(500).send({
+              message: "Could not delete Patient with id " + req.params.id
+            });
+          }
+        } else res.send(data);
+      });
+};
 
 exports.findOne=(req,res)=>{
     Paciente.findById(req.params.id,(err,data)=>{
